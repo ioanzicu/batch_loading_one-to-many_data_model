@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
 
 
 class Category(models.Model):
@@ -11,9 +10,6 @@ class Category(models.Model):
 
 class State(models.Model):
     name = models.CharField(max_length=128)
-    longitude = models.FloatField(null=True)
-    latitude = models.FloatField(null=True)
-    area_hectares = models.FloatField(null=True)
 
     def __str__(self) -> str:
         return self.name
@@ -38,6 +34,9 @@ class Site(models.Model):
     year = models.IntegerField(null=True)
     description = models.CharField(max_length=512)
     justification = models.CharField(max_length=512)
+    longitude = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
+    area_hectares = models.FloatField(null=True)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)

@@ -30,16 +30,7 @@ def run():
                 row[6], row[7], row[8], row[9], row[10])
         print(r)
 
-        try:
-            area_hectares = int(r.area_hectares)
-        except:
-            area_hectares = None
-
-        state, state_created = State.objects.get_or_create(
-            name=r.state,
-            longitude=r.longitude,
-            latitude=r.latitude,
-            area_hectares=area_hectares)
+        state, state_created = State.objects.get_or_create(name=r.state)
         region, redion_created = Region.objects.get_or_create(name=r.region)
         iso, iso_created = Iso.objects.get_or_create(name=r.iso)
         category, category_created = Category.objects.get_or_create(
@@ -50,21 +41,24 @@ def run():
         except:
             year = None
 
+        try:
+            area_hectares = float(r.area_hectares)
+        except:
+            area_hectares = None
+
+        print(year, area_hectares)
+
         site, site_created = Site.objects.get_or_create(
             name=r.name,
-            year=r.year,
+            year=year,
             description=r.description,
             justification=r.justification,
-            category=category,
-            state=state,
-            region=region, iso=iso)
+            longitude=r.longitude,
+            latitude=r.latitude,
+            area_hectares=area_hectares,
+            category=category,  # one to many
+            state=state,  # one to many
+            region=region,  # one to many
+            iso=iso)  # one to many
+
         site.save()
-
-        # p, created = Person.objects.get_or_create(email=row[0])
-        # c, created = Course.objects.get_or_create(title=row[2])
-
-        # r = Membership.LEARNER
-        # if row[1] == 'I':
-        #     r = Membership.INSTRUCTOR
-        # m = Membership(role=r, person=p, course=c)
-        # m.save()
